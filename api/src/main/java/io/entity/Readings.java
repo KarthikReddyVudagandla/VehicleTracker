@@ -17,7 +17,7 @@ public class Readings {
     @Id
     private String timestamp;
 
-    private float fuelVolume;
+    private double fuelVolume;
     private float speed;
     private int engineHp;
     private boolean checkEngineLightOn;
@@ -30,7 +30,7 @@ public class Readings {
     public Readings() {//default constructor
     }
 
-    public Readings(String vin, double latitude, double longitude, String timestamp, float fuelVolume, float speed, int engineHp, boolean checkEngineLightOn, boolean engineCoolantLow, boolean cruiseControlOn, int engineRpm, Tires tires) {
+    public Readings(String vin, double latitude, double longitude, String timestamp, double fuelVolume, float speed, int engineHp, boolean checkEngineLightOn, boolean engineCoolantLow, boolean cruiseControlOn, int engineRpm, Tires tires) {
         this.vin = vin;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -77,11 +77,11 @@ public class Readings {
         this.timestamp = timestamp;
     }
 
-    public float getFuelVolume() {
+    public double getFuelVolume() {
         return fuelVolume;
     }
 
-    public void setFuelVolume(float fuelVolume) {
+    public void setFuelVolume(double fuelVolume) {
         this.fuelVolume = fuelVolume;
     }
 
