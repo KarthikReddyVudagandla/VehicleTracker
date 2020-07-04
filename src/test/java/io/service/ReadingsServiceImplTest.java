@@ -1,7 +1,5 @@
 package io.service;
 
-import io.entity.GeoLocation;
-import io.entity.Locations;
 import io.entity.Readings;
 import io.entity.Tires;
 import io.repository.AlertsRepository;
@@ -55,18 +53,12 @@ class ReadingsServiceImplTest {
     List<Readings> list = new ArrayList();
     Readings readings1 = new Readings();
     Tires tires = new Tires();
-//    Locations locations = new Locations();
-//    List<Locations> locationsList = new ArrayList<>();
     @BeforeEach
     void setUp() {
         readings1.setVin("1HGCR2F3XFA027534");
-//        locations.setVin("1HGCR2F3XFA027534");
         readings1.setLatitude(41.803194);
-//        locations.setLatitude(41.803194);
         readings1.setLongitude(-88.144406);
-//        locations.setLongitude(-88.144406);
         readings1.setTimestamp("2017-05-25T17:31:25.268Z");
-//        locations.setTimestamp("2017-05-25T17:31:25.268Z");
         readings1.setFuelVolume(1.5);
         readings1.setSpeed(85);
         readings1.setEngineHp(240);
@@ -80,7 +72,6 @@ class ReadingsServiceImplTest {
         tires.setRearRight(34);
         readings1.setTires(tires);
         list.add(readings1);
-//        locationsList.add(locations);
         Mockito.when(readingsRepository.findAll()).thenReturn(list);
         Mockito.when(readingsRepository.findByVin("1HGCR2F3XFA027534")).thenReturn(list);
     }
