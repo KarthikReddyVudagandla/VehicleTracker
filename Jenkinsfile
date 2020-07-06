@@ -30,10 +30,9 @@ node {
 
     stage("docker push") {
 
-        withCredentials([usernamePassword(credentialsId: 'dockerhub')]) {
-        			sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
+        withDockerRegistry(credentialsId: 'dockerhub') {
+            sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
         }
-
     }
 
     stage("docker service") {
