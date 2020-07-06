@@ -2,7 +2,9 @@ node {
     def DOCKERHUB_REPO = "karthikreddyvkr1794/tracker-api"
     def DOCKER_SERVICE_ID = "tracker-service"
     def DOCKER_IMAGE_VERSION = ""
-
+    environment {
+        registryCredential = 'dockerhub'
+    }
     stage("clean workspace") {
         deleteDir()
     }
@@ -23,9 +25,14 @@ node {
     }
 
     stage("docker push") {
-        withDockerRegistry(credentialsId: 'dockerhub') {
-            sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
+        steps{
+            script {
+                docker.withRegistry( '', registryCredential ) {
+                    docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}
+                }
+            }
         }
+
     }
 
     stage("docker service") {
