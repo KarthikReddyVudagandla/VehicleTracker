@@ -21,7 +21,7 @@ node {
     }
 
     stage("mvn build") {
-        sh "mvn clean install"
+        sh "mvn clean install -DskipTests"
     }
 
     stage("docker build") {
@@ -30,10 +30,10 @@ node {
 
     stage("docker push") {
 
-        withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
-        			sh "docker login -u username -p ${dockerhub}"
+        withCredentials([usernamePassword(credentialsId: 'dockerhub')]) {
+        			sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
         }
-        sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
+
     }
 
     stage("docker service") {
