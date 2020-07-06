@@ -4,6 +4,7 @@ node {
     def DOCKER_IMAGE_VERSION = ""
     environment {
         registryCredential = 'dockerhub'
+        dockerImage=''
     }
     stage("clean workspace") {
         deleteDir()
@@ -14,6 +15,9 @@ node {
 
         def GIT_COMMIT = sh(returnStdout: true, script: "git rev-parse HEAD").trim().take(7)
         DOCKER_IMAGE_VERSION = "${BUILD_NUMBER}-${GIT_COMMIT}"
+        script {
+        dockerImage = "$DOCKERHUB_REPO:$DOCKER_IMAGE_VERSION"
+        }
     }
 
     stage("mvn build") {
@@ -28,7 +32,7 @@ node {
         steps{
             script {
                 docker.withRegistry( '', registryCredential ) {
-                    docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}
+                    dockerImage.push()
                 }
             }
         }
