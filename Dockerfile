@@ -14,4 +14,4 @@ EXPOSE 8080
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
-CMD [ "java","-Djava.security.egd=file:/dev/./urandom","-jar","/api.jar" ]
+CMD [ "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /api.jar" ]
