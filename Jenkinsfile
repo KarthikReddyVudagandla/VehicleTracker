@@ -29,11 +29,11 @@ node {
     }
 
     stage("docker push") {
-        script {
-            docker.withRegistry( '', registryCredential ) {
-                dockerImage.push()
-            }
+
+        withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+        			sh "docker login -u username -p ${dockerhub}"
         }
+        sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
     }
 
     stage("docker service") {
