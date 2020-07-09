@@ -34,15 +34,10 @@ node {
             // Create the service if it doesn't exist otherwise just update the image
             sh """
                 if [ \$(docker service ls --filter name=${DOCKER_SERVICE_ID} --quiet | wc -l) -eq 0 ]; then
-                  docker service create \
-                    --replicas 1 \
+                  docker run \
                     --name ${DOCKER_SERVICE_ID} \
                     --publish 8080:8080 \
                     ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}
-                else
-                  docker service update \
-                    --image ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION} \
-                    ${DOCKER_SERVICE_ID}
                 fi
             """
         }
