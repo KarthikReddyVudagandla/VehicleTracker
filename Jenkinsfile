@@ -37,7 +37,7 @@ node {
                   docker service create \
                     --replicas 1 \
                     --name ${DOCKER_SERVICE_ID} \
-                    --publish 8081:8081 \
+                    --publish 8080:8080 \
                     ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}
                 else
                   docker service update \
