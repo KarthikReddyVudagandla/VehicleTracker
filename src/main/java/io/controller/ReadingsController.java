@@ -1,11 +1,15 @@
 package io.controller;
 
+import com.amazonaws.services.sns.AmazonSNS;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.entity.*;
 import io.service.ReadingsService;
 import org.json.Cookie;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
@@ -31,6 +35,11 @@ public class ReadingsController {
     @Autowired
     private ReadingsService readingsService;
 
+    @Bean
+    public NotificationMessagingTemplate notificationMessagingTemplate(AmazonSNS amazonSNS) {
+        return new NotificationMessagingTemplate(amazonSNS);
+    }
+
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Readings> findAll(){
         return readingsService.findAll();
@@ -42,7 +51,7 @@ public class ReadingsController {
     }
 
     @RequestMapping(method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void create(@RequestBody Readings readings){
+    public void create(@RequestBody Readings readings) throws JsonProcessingException {
 
         readingsService.create(readings);
     }

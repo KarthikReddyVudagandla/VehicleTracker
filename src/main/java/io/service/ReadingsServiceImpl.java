@@ -1,5 +1,7 @@
 package io.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.entity.Locations;
 import io.entity.Readings;
 import io.entity.Vehicle;
@@ -35,6 +37,9 @@ public class ReadingsServiceImpl implements ReadingsService {
     @Autowired
     AlertsRepository alertsRepository;
 
+    @Autowired
+    SnsService snsService;
+
     @Override
     public List<Readings> findAll() {
         return (List<Readings>) readingsRepository.findAll();
@@ -42,8 +47,9 @@ public class ReadingsServiceImpl implements ReadingsService {
 
     @Override
     @Transactional
-    public void create(Readings readings) {
+    public void create(Readings readings) throws JsonProcessingException {
         Optional<Vehicle> vehicle = vehicleRepository.findById(readings.getVin());
+        ObjectMapper objectMapper = new ObjectMapper();
         if(vehicle.isPresent()) { //save readings only if vin exists in vehicles tables
             //check for alerts here
             if(readings.getEngineRpm() > vehicle.get().getRedlineRpm()){
@@ -53,6 +59,7 @@ public class ReadingsServiceImpl implements ReadingsService {
                 alert.setPriority(priority.HIGH);
                 alert.setRule(rule.EngineRpmHigh);
                 alertsRepository.save(alert);
+                snsService.send("Engine RPM Alert",objectMapper.writeValueAsString(alert));
                 System.out.println("ALERT: "+alert);
             }
             if(readings.isCheckEngineLightOn() || readings.isEngineCoolantLow()){
@@ -62,6 +69,7 @@ public class ReadingsServiceImpl implements ReadingsService {
                 alert.setPriority(priority.LOW);
                 alert.setRule(rule.EngineCoolantLow_OR_CheckEngineLightOn);
                 alertsRepository.save(alert);
+                snsService.send("Engine Check or Coolant Alert",objectMapper.writeValueAsString(alert));
                 System.out.println("ALERT: "+alert);
             }
             if(readings.getFuelVolume() < (0.1*vehicle.get().getMaxFuelVolume())){
@@ -71,6 +79,7 @@ public class ReadingsServiceImpl implements ReadingsService {
                 alert.setPriority(priority.MEDIUM);
                 alert.setRule(rule.FuelVolumeLow);
                 alertsRepository.save(alert);
+                snsService.send("Fuel Alert",objectMapper.writeValueAsString(alert));
                 System.out.println("ALERT: "+alert);
             }
             if(readings.getTires().getFrontLeft() < 32 || readings.getTires().getFrontLeft() > 36
@@ -83,6 +92,7 @@ public class ReadingsServiceImpl implements ReadingsService {
                 alert.setPriority(priority.LOW);
                 alert.setRule(rule.TirePressureAbnormal);
                 alertsRepository.save(alert);
+                snsService.send("Tire Pressure Alert",objectMapper.writeValueAsString(alert));
                 System.out.println("ALERT: "+alert);
             }
 
