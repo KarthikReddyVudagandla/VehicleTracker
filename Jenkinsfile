@@ -36,6 +36,9 @@ node {
                 if [ \$(docker service ls --filter name=${DOCKER_SERVICE_ID} --quiet | wc -l) -eq 0 ]; then
                   docker service create --mode=global --publish mode=host,target=8080,published=8080 \
                     --name ${DOCKER_SERVICE_ID} \
+                    --secret spring.datasource.url \
+                    --secret spring.datasource.username \
+                    --secret spring.datasource.password \
                     ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}
                 fi
             """
