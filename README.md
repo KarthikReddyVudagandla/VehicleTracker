@@ -1,13 +1,6 @@
-# car-tracker-seed
-seed for the Full-Stack IOT training project: car-tracker
+# trucker-seed
+seed for the Webservices & Cloud project
 
-## directory structure:
-
-**`client`** [*module-client*]: contains ui app (HTML, CSS, JS, fonts, images)      
-**`api`** [*module-api*]: contains REST API
-
-## mock sensor: 
-[http://mocker.egen.io](http://mocker.egen.io)
-
-## requirements:
-[https://learn.egen.io](https://learn.egen.io/courses/overview.html)
+### For the final module submission, update following urls for your app:
+**`Jenkins URL`**: `http://ec2-<somehost>.amazonaws.com/jenkins`    
+**`Swagger URL`**: `http://ec2-<somehost>.amazonaws.com/swagger`
